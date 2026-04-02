@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpiceX | One-Pager</title>
-<meta name="description" content="SpiceX is the AI-native automation layer that sits on top of your existing enterprise systems and makes them work together. No rip-and-replace.">
+<title>SpiceX | Partner With Us</title>
+<meta name="description" content="SpiceX is the AI-native automation layer that sits on top of your existing enterprise systems. Earn $500 per referral or schedule a call to learn more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -35,8 +35,18 @@ body{background:var(--black);color:#fff;font-family:var(--sans);overflow-x:hidde
 .glow-wrap .o2{position:absolute;width:40vw;height:40vw;background:rgba(0,100,255,.3);border-radius:50%;bottom:-10vw;right:-5vw;animation:gf 22s ease-in-out infinite alternate-reverse}
 @keyframes gf{0%{transform:scale(1) translate(0,0)}50%{transform:scale(1.2) translate(6vw,3vw)}100%{transform:scale(.85) translate(-3vw,-4vw)}}
 
+/* ═══ STICKY CTA TOP BAR ═══ */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,6,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:10px 28px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.top-bar-text{font-family:var(--mono);font-size:.72rem;color:var(--steel);letter-spacing:.02em}
+.top-bar-text strong{color:#fff}
+.top-bar-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:10px;font-family:var(--head);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:all .3s var(--ease);border:none;text-decoration:none;color:#fff}
+.top-bar-btn.refer{background:linear-gradient(135deg,var(--orange),#cc4f1a);box-shadow:0 2px 14px rgba(255,107,53,.3)}
+.top-bar-btn.refer:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(255,107,53,.5)}
+.top-bar-btn.schedule{background:linear-gradient(135deg,var(--red),var(--red) 40%,#8a0012);box-shadow:0 2px 14px rgba(214,0,28,.3)}
+.top-bar-btn.schedule:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(214,0,28,.5)}
+
 /* ═══ MAIN CONTAINER ═══ */
-.page{position:relative;z-index:10;max-width:920px;margin:0 auto;padding:0 28px}
+.page{position:relative;z-index:10;max-width:920px;margin:0 auto;padding:0 28px;padding-top:60px}
 
 /* ═══ HEADER ═══ */
 header{display:flex;align-items:center;justify-content:space-between;padding:32px 0 24px}
@@ -289,6 +299,13 @@ footer{text-align:center;padding:18px;font-family:var(--mono);font-size:.55rem;c
 </head>
 <body>
 
+<!-- STICKY CTA BAR -->
+<div class="top-bar">
+  <span class="top-bar-text"><strong>SpiceX</strong> — Future-Proof Your Enterprise</span>
+  <a href="../landing-page/index.html#fork-referral" class="top-bar-btn refer" onclick="navigateReferral(event)"><i class="fa-solid fa-handshake-simple"></i> Refer & Earn $500</a>
+  <a href="../landing-page/index.html#fork-direct" class="top-bar-btn schedule" onclick="navigateSchedule(event)"><i class="fa-solid fa-phone"></i> Schedule a Call</a>
+</div>
+
 <div class="glow-wrap"><div class="o1"></div><div class="o2"></div></div>
 <canvas id="bg"></canvas>
 <div class="scanlines"></div>
@@ -298,7 +315,7 @@ footer{text-align:center;padding:18px;font-family:var(--mono);font-size:.55rem;c
   <!-- HEADER -->
   <header>
     <img src="https://islayah5.github.io/image-assets/SpiceX_logo/SpiceX%20Logo.png" alt="SpiceX">
-    <div class="tag">One-Pager · 2026</div>
+    <div class="tag">Partner Program · 2026</div>
   </header>
 
   <!-- HERO -->
@@ -453,6 +470,16 @@ addEventListener('resize',rs);rs();draw();
 // Scroll reveal
 const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// CTA Navigation — routes to main landing page forms
+function navigateReferral(e) {
+  // Link directly to the landing page's referral path
+  // The href fallback works if JS fails
+}
+function navigateSchedule(e) {
+  // Link directly to the landing page's direct/schedule path
+  // The href fallback works if JS fails
+}
 </script>
 </body>
 </html>
