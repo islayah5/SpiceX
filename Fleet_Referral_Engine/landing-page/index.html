@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SpiceX | Fleet Partner Program</title>
+<meta name="description" content="Get SpiceX for your business or earn $500 for every qualified referral. The AI-native automation platform that makes your systems work together.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- META PIXEL STUB -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+// fbq('init', 'YOUR_PIXEL_ID');
+// fbq('track', 'PageView', { content_category: 'fleet_referral' });
+</script>
+
+<style>
+/* ═══════════════════════════════════════════ */
+/*  RESET & TOKENS                            */
+/* ═══════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D6001C;--red-glow:rgba(214,0,28,.6);--red-dark:#8a0012;
+  --orange:#ff6b35;--black:#030303;--card:#0a0a0a;
+  --steel:#c2c8cf;--steel-dim:#8a8f96;
+  --glass:rgba(12,12,12,.55);--glass-b:rgba(255,255,255,.08);
+  --sans:'Montserrat',system-ui,sans-serif;
+  --head:'Oswald',system-ui,sans-serif;
+  --mono:'Space Grotesk',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--black);color:#fff;font-family:var(--sans);
+  overflow-x:hidden;min-height:100dvh;-webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--red);color:#fff}
+
+/* ═══════════════════════════════════════════ */
+/*  3D PARTICLE CANVAS                        */
+/* ═══════════════════════════════════════════ */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ═══════════════════════════════════════════ */
+/*  CINEMATIC OVERLAYS                        */
+/* ═══════════════════════════════════════════ */
+.scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.01) 2px,rgba(255,255,255,.01) 4px);pointer-events:none;z-index:1;opacity:.35}
+.vignette{position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.85));pointer-events:none;z-index:1}
+.chrome-edge{position:fixed;inset:0;box-shadow:inset 0 0 80px rgba(214,0,28,.04),inset 0 0 200px rgba(0,0,0,.3);pointer-events:none;z-index:1}
+.glow-wrapper{position:fixed;inset:0;z-index:0;filter:blur(90px);pointer-events:none;opacity:.1}
+.glow-orb{position:absolute;border-radius:50%}
+.orb1{width:60vw;height:60vw;background:var(--red);top:-20vw;left:-15vw;animation:orbFloat 25s ease-in-out infinite alternate}
+.orb2{width:45vw;height:45vw;background:rgba(0,120,255,.25);bottom:-15vw;right:-10vw;animation:orbFloat 18s ease-in-out infinite alternate-reverse}
+@keyframes orbFloat{
+  0%{transform:scale(1) translate(0,0)}
+  50%{transform:scale(1.3) translate(8vw,4vw)}
+  100%{transform:scale(.9) translate(-4vw,-6vw)}
+}
+
+/* ═══════════════════════════════════════════ */
+/*  INTRO BLOOM (replaces jarring shockwave)  */
+/* ═══════════════════════════════════════════ */
+.intro-bloom{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:0;height:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(214,0,28,.25),rgba(214,0,28,.06) 40%,transparent 70%);
+  z-index:2;pointer-events:none;opacity:0}
+.intro-bloom.active{animation:bloomExpand 2s var(--ease) forwards}
+@keyframes bloomExpand{
+  0%{width:0;height:0;opacity:.8}
+  40%{width:120vmax;height:120vmax;opacity:.4}
+  100%{width:180vmax;height:180vmax;opacity:0}
+}
+.intro-line{position:fixed;top:0;left:50%;transform:translateX(-50%);
+  width:1px;height:0;background:linear-gradient(180deg,transparent,var(--red),transparent);
+  z-index:3;pointer-events:none;opacity:0}
+.intro-line.active{animation:lineDown 1.2s .3s var(--ease) forwards}
+@keyframes lineDown{
+  0%{height:0;opacity:0;top:40%}
+  30%{opacity:.6}
+  100%{height:30vh;opacity:0;top:60%}
+}
+
+/* ═══════════════════════════════════════════ */
+/*  APP SHELL                                 */
+/* ═══════════════════════════════════════════ */
+.app{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;min-height:100dvh;padding:0 20px}
+
+/* ═══════════════════════════════════════════ */
+/*  LOGO                                      */
+/* ═══════════════════════════════════════════ */
+.logo-wrap{padding:28px 0 0;text-align:center;opacity:0;animation:fadeDown 1s .3s forwards}
+.logo-wrap img{height:32px;filter:drop-shadow(0 0 24px rgba(214,0,28,.4));transition:filter .3s}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════ */
+/*  SCREENS                                   */
+/* ═══════════════════════════════════════════ */
+.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:480px;flex:1;justify-content:center;padding:20px 0 40px}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════════════ */
+/*  THE FORK (SCREEN 1)                       */
+/* ═══════════════════════════════════════════ */
+.welcome{font-family:var(--mono);font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--steel-dim);margin-bottom:6px;opacity:0;animation:fadeUp .8s .6s forwards}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:100px;border:1px solid rgba(214,0,28,.25);background:rgba(214,0,28,.04);margin-bottom:20px;opacity:0;animation:fadeUp .8s .75s forwards}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);position:relative}
+.hero-badge .dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:var(--red);animation:ping 2.5s var(--ease) infinite;opacity:0}
+@keyframes ping{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
+.hero-badge span{font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red)}
+
+.fork-title{font-family:var(--head);font-size:clamp(1.8rem,6vw,2.6rem);font-weight:700;text-transform:uppercase;text-align:center;line-height:.95;letter-spacing:-.01em;margin-bottom:4px;opacity:0;animation:fadeUp .8s .9s forwards}
+.fork-sub{font-family:var(--mono);font-size:.74rem;color:var(--steel-dim);text-align:center;margin-bottom:28px;opacity:0;animation:fadeUp .8s 1.05s forwards}
+
+/* FORK CARDS */
+.fork-cards{display:flex;flex-direction:column;gap:12px;width:100%}
+.fork-card{position:relative;background:var(--glass);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--glass-b);border-radius:18px;padding:20px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .35s var(--ease);overflow:hidden;opacity:0;transform:translateY(24px)}
+.fork-card.visible{opacity:1;transform:translateY(0);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+
+/* Gradient border on hover */
+.fork-card::before{content:'';position:absolute;inset:-1px;border-radius:19px;padding:1px;background:linear-gradient(135deg,var(--red),var(--orange),var(--red));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
+.fork-card:hover::before{opacity:1}
+
+/* Inner glow on hover */
+.fork-card::after{content:'';position:absolute;inset:0;border-radius:18px;background:radial-gradient(circle at 30% 50%,rgba(214,0,28,.08),transparent 60%);opacity:0;transition:opacity .4s}
+.fork-card:hover::after{opacity:1}
+
+.fork-card:hover{transform:translateY(-3px)!important;background:rgba(15,15,15,.75);box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 40px rgba(214,0,28,.08)}
+.fork-card:active{transform:scale(.97)!important;transition:transform .1s}
+
+/* ═══ PREMIUM ICON CONTAINERS ═══ */
+.fork-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:2;transition:all .4s var(--ease);overflow:hidden}
+
+/* Icon 1: I Need This — Rocket */
+.fork-card:nth-child(1) .fork-icon{
+  background:linear-gradient(135deg,rgba(214,0,28,.12),rgba(214,0,28,.04));
+  border:1px solid rgba(214,0,28,.2);
+  color:var(--red);font-size:1.15rem;
+  box-shadow:inset 0 0 12px rgba(214,0,28,.06)}
+.fork-card:nth-child(1):hover .fork-icon{
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  border-color:var(--red);color:#fff;
+  box-shadow:0 0 24px rgba(214,0,28,.5),inset 0 0 12px rgba(255,255,255,.1)}
+
+/* Icon 2: I Know Someone — Handshake */
+.fork-card:nth-child(2) .fork-icon{
+  background:linear-gradient(135deg,rgba(255,107,53,.12),rgba(255,107,53,.04));
+  border:1px solid rgba(255,107,53,.2);
+  color:var(--orange);font-size:1.15rem;
+  box-shadow:inset 0 0 12px rgba(255,107,53,.06)}
+.fork-card:nth-child(2):hover .fork-icon{
+  background:linear-gradient(135deg,var(--orange),#cc4f1a);
+  border-color:var(--orange);color:#fff;
+  box-shadow:0 0 24px rgba(255,107,53,.5),inset 0 0 12px rgba(255,255,255,.1)}
+
+/* Icon 3: Just Curious — Play */
+.fork-card:nth-child(3) .fork-icon{
+  background:linear-gradient(135deg,rgba(194,200,207,.1),rgba(194,200,207,.03));
+  border:1px solid rgba(194,200,207,.15);
+  color:var(--steel);font-size:1.15rem;
+  box-shadow:inset 0 0 12px rgba(194,200,207,.04)}
+.fork-card:nth-child(3):hover .fork-icon{
+  background:linear-gradient(135deg,#c2c8cf,#8a8f96);
+  border-color:var(--steel);color:#111;
+  box-shadow:0 0 24px rgba(194,200,207,.4),inset 0 0 12px rgba(255,255,255,.1)}
+
+/* Icon shimmer effect */
+.fork-icon::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(transparent,rgba(255,255,255,.05),transparent 30%);
+  animation:iconShimmer 6s linear infinite;opacity:0;transition:opacity .4s}
+.fork-card:hover .fork-icon::before{opacity:1}
+@keyframes iconShimmer{to{transform:rotate(360deg)}}
+
+.fork-card-text{position:relative;z-index:2}
+.fork-card-text h3{font-family:var(--head);font-size:1.1rem;font-weight:700;text-transform:uppercase;margin-bottom:2px;letter-spacing:.02em}
+.fork-card-text p{font-size:.68rem;color:var(--steel-dim);font-family:var(--mono);letter-spacing:.02em}
+.fork-arrow{margin-left:auto;color:rgba(255,255,255,.2);transition:all .35s var(--ease);position:relative;z-index:2;font-size:.85rem}
+.fork-card:hover .fork-arrow{color:#fff;transform:translateX(5px)}
+
+/* Benefit chips below fork */
+.trust-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:24px;opacity:0;animation:fadeUp .8s 1.8s forwards;flex-wrap:wrap}
+.trust-chip{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.58rem;color:var(--steel-dim);letter-spacing:.08em;text-transform:uppercase}
+.trust-chip i{font-size:.55rem;color:rgba(214,0,28,.45)}
+
+/* ═══════════════════════════════════════════ */
+/*  FORM SCREENS                              */
+/* ═══════════════════════════════════════════ */
+.screen-header{text-align:center;margin-bottom:28px;width:100%}
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:.62rem;font-weight:600;color:var(--steel-dim);cursor:pointer;transition:all .25s;margin-bottom:18px;letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);padding:6px 12px;border-radius:8px;border:1px solid transparent}
+.back-btn:hover{color:#fff;border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
+.screen-header h2{font-family:var(--head);font-size:clamp(1.5rem,5vw,2.1rem);font-weight:700;text-transform:uppercase;line-height:1;letter-spacing:-.01em}
+.screen-header p{font-family:var(--mono);font-size:.72rem;color:var(--steel-dim);margin-top:6px}
+
+.form-group{width:100%;margin-bottom:12px}
+.form-group label{display:block;font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--steel-dim);margin-bottom:5px;font-family:var(--mono)}
+.form-group input,.form-group select{width:100%;padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(8,8,8,.9);color:#fff;font-family:var(--sans);font-size:.88rem;font-weight:500;transition:all .3s var(--ease);outline:none}
+.form-group input:focus,.form-group select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(214,0,28,.1),0 0 20px rgba(214,0,28,.06)}
+.form-group input::placeholder{color:rgba(255,255,255,.2)}
+.form-group.optional label::after{content:' (optional)';color:rgba(255,255,255,.18);font-weight:400;text-transform:none;letter-spacing:0}
+
+/* Two-column row */
+.form-row{display:flex;gap:10px;width:100%}
+.form-row .form-group{flex:1}
+
+.form-divider{width:100%;text-align:center;margin:18px 0;position:relative}
+.form-divider::before{content:'';position:absolute;left:0;top:50%;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent)}
+.form-divider span{position:relative;background:var(--black);padding:0 14px;font-size:.58rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--steel-dim);font-family:var(--mono)}
+
+/* CTA button */
+.submit-btn{width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);color:#fff;font-family:var(--head);font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;transition:all .3s var(--ease);position:relative;overflow:hidden;margin-top:10px;box-shadow:0 4px 20px rgba(214,0,28,.3)}
+.submit-btn::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent,rgba(255,255,255,.08),transparent 30%);animation:btnSweep 4s linear infinite}
+@keyframes btnSweep{to{transform:rotate(360deg)}}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(214,0,28,.5)}
+.submit-btn:active{transform:scale(.97)}
+.submit-btn.loading{pointer-events:none;opacity:.7}
+.submit-btn.loading::after{content:'';position:absolute;width:20px;height:20px;border:2px solid transparent;border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;top:50%;left:50%;margin:-10px 0 0 -10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.skip-link{display:block;text-align:center;margin-top:14px;font-size:.62rem;color:var(--steel-dim);font-family:var(--mono);cursor:pointer;letter-spacing:.08em;transition:color .2s}
+.skip-link:hover{color:var(--red)}
+
+/* ═══════════════════════════════════════════ */
+/*  SUCCESS SCREEN                            */
+/* ═══════════════════════════════════════════ */
+.success-icon{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(214,0,28,.1),rgba(214,0,28,.04));border:2px solid rgba(214,0,28,.35);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--red);margin:20px auto 18px;animation:scaleIn .6s var(--ease);position:relative}
+.success-icon::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(214,0,28,.12);animation:ping 2.5s infinite}
+.success-title{font-family:var(--head);font-size:1.8rem;font-weight:700;text-transform:uppercase;text-align:center;margin-bottom:8px}
+.success-sub{font-family:var(--mono);font-size:.74rem;color:var(--steel);text-align:center;max-width:340px;line-height:1.7}
+.success-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:100px;border:1px solid rgba(214,0,28,.15);background:rgba(214,0,28,.04);margin-top:20px;font-family:var(--mono);font-size:.62rem;font-weight:600;color:var(--red);letter-spacing:.1em}
+@keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ═══════════════════════════════════════════ */
+/*  CURIOUS SCREEN                            */
+/* ═══════════════════════════════════════════ */
+.video-wrap{width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);margin-bottom:18px;background:#000;position:relative;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.video-wrap iframe{width:100%;height:100%;border:none}
+.benefit-cards{display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:18px}
+.benefit-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--glass-b);border-radius:14px;padding:16px;display:flex;align-items:flex-start;gap:12px;transition:all .35s var(--ease)}
+.benefit-card:hover{border-color:rgba(214,0,28,.25);background:rgba(18,18,18,.7);transform:translateX(4px)}
+.b-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(214,0,28,.1),rgba(214,0,28,.04));border:1px solid rgba(214,0,28,.15);color:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;transition:all .35s}
+.benefit-card:hover .b-icon{background:linear-gradient(135deg,var(--red),var(--red-dark));border-color:var(--red);color:#fff;box-shadow:0 0 18px rgba(214,0,28,.4)}
+.benefit-card h4{font-family:var(--head);font-size:.84rem;font-weight:700;text-transform:uppercase;margin-bottom:3px;letter-spacing:.02em}
+.benefit-card p{font-size:.66rem;color:var(--steel-dim);font-family:var(--mono);line-height:1.6}
+
+/* ═══════════════════════════════════════════ */
+/*  FOOTER                                    */
+/* ═══════════════════════════════════════════ */
+.page-footer{text-align:center;padding:16px 20px;font-family:var(--mono);font-size:.5rem;color:rgba(255,255,255,.12);letter-spacing:.25em;text-transform:uppercase;width:100%;margin-top:auto}
+
+/* ═══════════════════════════════════════════ */
+/*  UTILITY ANIMATIONS                        */
+/* ═══════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════════ */
+/*  SCROLLBAR                                 */
+/* ═══════════════════════════════════════════ */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- CINEMATIC LAYERS -->
+<div class="glow-wrapper"><div class="glow-orb orb1"></div><div class="glow-orb orb2"></div></div>
+<canvas id="particles"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div class="chrome-edge"></div>
+<div class="intro-bloom" id="bloom"></div>
+<div class="intro-line" id="introLine"></div>
+
+<div class="app">
+  <div class="logo-wrap">
+    <img src="https://islayah5.github.io/image-assets/SpiceX_logo/SpiceX%20Logo.png" alt="SpiceX" id="main-logo">
+  </div>
+
+  <!-- ═══ SCREEN 1: THE FORK ═══ -->
+  <div class="screen active" id="screen-fork">
+    <div class="welcome">Welcome. You found us.</div>
+    <div class="hero-badge"><span class="dot"></span><span>Fleet Partner Program</span></div>
+    <h1 class="fork-title">What Brings You Here?</h1>
+    <p class="fork-sub">One scan. Three paths. Zero pressure.</p>
+
+    <div class="fork-cards">
+      <div class="fork-card" onclick="navigateTo('screen-direct','direct')" id="fork-direct">
+        <div class="fork-icon"><i class="fa-solid fa-rocket"></i></div>
+        <div class="fork-card-text"><h3>I Need This</h3><p>Get SpiceX for my business</p></div>
+        <i class="fa-solid fa-chevron-right fork-arrow"></i>
+      </div>
+      <div class="fork-card" onclick="navigateTo('screen-referral','referral')" id="fork-referral">
+        <div class="fork-icon"><i class="fa-solid fa-handshake-simple"></i></div>
+        <div class="fork-card-text"><h3>I Know Someone</h3><p>Refer &amp; earn $500 per closed deal</p></div>
+        <i class="fa-solid fa-chevron-right fork-arrow"></i>
+      </div>
+      <div class="fork-card" onclick="navigateTo('screen-curious','curious')" id="fork-curious">
+        <div class="fork-icon"><i class="fa-solid fa-circle-play"></i></div>
+        <div class="fork-card-text"><h3>Just Curious</h3><p>60-second overview of SpiceX</p></div>
+        <i class="fa-solid fa-chevron-right fork-arrow"></i>
+      </div>
+    </div>
+
+    <div class="trust-bar">
+      <div class="trust-chip"><i class="fa-solid fa-shield-halved"></i> SOC 2 Type II</div>
+      <div class="trust-chip"><i class="fa-solid fa-lock"></i> HIPAA-Ready</div>
+      <div class="trust-chip"><i class="fa-solid fa-bolt"></i> Deploys in Weeks</div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 2A: DIRECT LEAD ═══ -->
+  <div class="screen" id="screen-direct">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigateTo('screen-fork')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+      <h2>Let's Get You Connected</h2>
+      <p>Quick details. We'll reach out within 2 hours.</p>
+    </div>
+    <form id="form-direct" onsubmit="return submitDirect(event)">
+      <input type="hidden" name="source" value="truck_hardcard">
+      <input type="hidden" name="event" value="fleet_lead_direct">
+      <input type="hidden" id="utm_source"><input type="hidden" id="utm_medium"><input type="hidden" id="utm_campaign">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" name="first_name" placeholder="Jane" required id="direct-fname" autocomplete="given-name"></div>
+        <div class="form-group"><label>Last Name</label><input type="text" name="last_name" placeholder="Doe" required id="direct-lname" autocomplete="family-name"></div>
+      </div>
+      <div class="form-group"><label>Work Email</label><input type="email" name="email" placeholder="jane@company.com" required id="direct-email" autocomplete="email"></div>
+      <div class="form-group"><label>Phone</label><input type="tel" name="phone" placeholder="(555) 123-4567" required id="direct-phone" autocomplete="tel"></div>
+      <div class="form-row">
+        <div class="form-group optional"><label>Company</label><input type="text" name="company" placeholder="Acme Corp" id="direct-company" autocomplete="organization"></div>
+        <div class="form-group optional"><label>Title</label><input type="text" name="title" placeholder="CIO" id="direct-title" autocomplete="organization-title"></div>
+      </div>
+      <button type="submit" class="submit-btn" id="btn-direct">Connect Me <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+  </div>
+
+  <!-- ═══ SCREEN 2B: REFERRAL ═══ -->
+  <div class="screen" id="screen-referral">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigateTo('screen-fork')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+      <h2>Earn For Every Connection</h2>
+      <p>$500 per closed deal. No cap. No limit.</p>
+    </div>
+    <form id="form-referral" onsubmit="return submitReferral(event)">
+      <input type="hidden" name="source" value="truck_hardcard">
+      <input type="hidden" name="event" value="fleet_lead_referral">
+      <div class="form-divider"><span>Your Info</span></div>
+      <div class="form-group"><label>Your Name</label><input type="text" name="referrer_name" placeholder="Mike Smith" required id="ref-name"></div>
+      <div class="form-group"><label>Your Email</label><input type="email" name="referrer_email" placeholder="mike@gmail.com" required id="ref-email"></div>
+      <div class="form-group"><label>Your Phone</label><input type="tel" name="referrer_phone" placeholder="(555) 123-4567" required id="ref-phone"></div>
+      <div class="form-divider"><span>Their Info</span></div>
+      <div class="form-group"><label>Contact Name</label><input type="text" name="referred_name" placeholder="Jane Doe" required id="ref-lead-name"></div>
+      <div class="form-group"><label>Contact Email</label><input type="email" name="referred_email" placeholder="jane@company.com" required id="ref-lead-email"></div>
+      <div class="form-group optional"><label>Contact Phone</label><input type="tel" name="referred_phone" placeholder="(555) 987-6543" id="ref-lead-phone"></div>
+      <div class="form-group optional"><label>Company</label><input type="text" name="referred_company" placeholder="Acme Corp" id="ref-lead-company"></div>
+      <button type="submit" class="submit-btn" id="btn-referral">Submit Referral <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+  </div>
+
+  <!-- ═══ SCREEN 2C: CURIOUS ═══ -->
+  <div class="screen" id="screen-curious">
+    <div class="screen-header">
+      <div class="back-btn" onclick="navigateTo('screen-fork')"><i class="fa-solid fa-arrow-left"></i> Back</div>
+      <h2>SpiceX in 60 Seconds</h2>
+      <p>See why enterprise CIOs are making the switch.</p>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/kPbFDXWCHfs?autoplay=0&controls=1&modestbranding=1&rel=0&playsinline=1" title="SpiceX Overview" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="benefit-cards">
+      <div class="benefit-card">
+        <div class="b-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <div><h4>System of Systems</h4><p>Sits on top of Salesforce, SAP, ServiceNow — no rip-and-replace required.</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="b-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div><h4>10x Faster Deployment</h4><p>Drag-and-drop builder. Deploy automations in weeks, not months.</p></div>
+      </div>
+      <div class="benefit-card">
+        <div class="b-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h4>Enterprise-Grade Security</h4><p>SOC 2 Type II · HIPAA-ready · AI-agnostic — swap models on the fly.</p></div>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="navigateTo('screen-direct','direct')">Ready? Get Started <i class="fa-solid fa-arrow-right"></i></button>
+    <div class="skip-link" onclick="navigateTo('screen-referral','referral')">Or refer someone and earn $500 →</div>
+  </div>
+
+  <!-- ═══ SUCCESS: DIRECT ═══ -->
+  <div class="screen" id="screen-success-direct">
+    <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+    <h2 class="success-title">You're In</h2>
+    <p class="success-sub">A SpiceX team member will reach out within 2 hours via phone or email. We'll map your workflow live and show you exactly where we fit.</p>
+    <div class="success-badge"><i class="fa-solid fa-clock"></i> 2-Hour Response Guarantee</div>
+  </div>
+
+  <!-- ═══ SUCCESS: REFERRAL ═══ -->
+  <div class="screen" id="screen-success-referral">
+    <div class="success-icon"><i class="fa-solid fa-handshake-simple"></i></div>
+    <h2 class="success-title">Referral Submitted</h2>
+    <p class="success-sub">We'll reach out to your contact within 24 hours. You'll get email and text updates at every stage — and $500 when the deal closes.</p>
+    <div class="success-badge"><i class="fa-solid fa-envelope"></i> Check Your Inbox for Updates</div>
+  </div>
+
+  <footer class="page-footer">SpiceX · Future-Proof Technology · 2026</footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  3D PLEXUS PARTICLE ENGINE
+// ═══════════════════════════════════════════
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, time = 0;
+const FL = 400, PCOUNT = 100, LINK = 160;
+
+function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+
+class P3D {
+  constructor() {
+    this.x = (Math.random()-.5)*W*1.5;
+    this.y = (Math.random()-.5)*H*1.5;
+    this.z = Math.random()*FL*2;
+    this.speed = Math.random()*.4+.15;
+    this.off = Math.random()*Math.PI*2;
+  }
+  update() {
+    const s = .004;
+    this.x += Math.sin(this.y*s+time+this.off)*this.speed*1.8;
+    this.y += Math.cos(this.z*s+time+this.off)*this.speed*1.8;
+    this.z += Math.sin(this.x*s-time)*this.speed*1.8;
+    if(this.x>W) this.x=-W; if(this.x<-W) this.x=W;
+    if(this.y>H) this.y=-H; if(this.y<-H) this.y=H;
+    if(this.z>FL*2) this.z=-FL; if(this.z<-FL) this.z=FL*2;
+  }
+}
+
+const pts = Array.from({length:PCOUNT}, ()=>new P3D());
+let mouseX=-1e4, mouseY=-1e4;
+
+function renderParticles() {
+  time += .008;
+  ctx.clearRect(0,0,W,H);
+  const proj = [];
+  pts.forEach(p => {
+    p.update();
+    const sc = FL/(FL+p.z);
+    if(sc>0) proj.push({o:p, px:W/2+p.x*sc, py:H/2+p.y*sc, sc});
+  });
+  // Links
+  for(let i=0;i<proj.length;i++){
+    const a=proj[i];
+    for(let j=i+1;j<proj.length;j++){
+      const b=proj[j];
+      const d=Math.sqrt((a.o.x-b.o.x)**2+(a.o.y-b.o.y)**2+(a.o.z-b.o.z)**2);
+      if(d<LINK){
+        const da=Math.min((a.sc+b.sc)/2,1);
+        const al=(1-d/LINK)*da*.35;
+        ctx.beginPath();ctx.moveTo(a.px,a.py);ctx.lineTo(b.px,b.py);
+        ctx.strokeStyle=da>.75?`rgba(214,0,28,${al})`:`rgba(176,184,193,${al})`;
+        ctx.lineWidth=.6;ctx.stroke();
+      }
+    }
+  }
+  // Dots
+  proj.forEach(p => {
+    const da=Math.min(p.sc*1.2,1);
+    ctx.beginPath();ctx.arc(p.px,p.py,Math.max(p.sc*2.2,.5),0,Math.PI*2);
+    if(p.sc>.75){ctx.fillStyle=`rgba(214,0,28,${da*.7})`;ctx.shadowColor='#D6001C';ctx.shadowBlur=8*p.sc;}
+    else{ctx.fillStyle=`rgba(176,184,193,${da*.4})`;ctx.shadowBlur=0;}
+    ctx.fill();ctx.shadowBlur=0;
+  });
+  // Mouse repulsion glow
+  if(mouseX>0){
+    ctx.beginPath();ctx.arc(mouseX,mouseY,60,0,Math.PI*2);
+    const g=ctx.createRadialGradient(mouseX,mouseY,0,mouseX,mouseY,60);
+    g.addColorStop(0,'rgba(214,0,28,.06)');g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;ctx.fill();
+  }
+  requestAnimationFrame(renderParticles);
+}
+addEventListener('resize', ()=>{resize();});
+addEventListener('mousemove', e=>{mouseX=e.clientX;mouseY=e.clientY;});
+resize(); renderParticles();
+
+// ═══════════════════════════════════════════
+//  INTRO BLOOM (smooth, non-jarring)
+// ═══════════════════════════════════════════
+setTimeout(()=>{
+  document.getElementById('bloom').classList.add('active');
+  document.getElementById('introLine').classList.add('active');
+}, 400);
+
+// ═══════════════════════════════════════════
+//  SCREEN ROUTING
+// ═══════════════════════════════════════════
+function navigateTo(id, path) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.opacity='0';s.style.transform='translateY(16px)';
+  });
+  const target = document.getElementById(id);
+  setTimeout(()=>{
+    target.classList.add('active');
+    requestAnimationFrame(()=>{target.style.opacity='1';target.style.transform='translateY(0)';});
+  }, 150);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(path) trackEvent('ViewContent',{content_name:'path_'+path,content_category:'fleet_referral'});
+}
+
+// ═══════════════════════════════════════════
+//  UTM CAPTURE
+// ═══════════════════════════════════════════
+(()=>{
+  const p=new URLSearchParams(location.search);
+  const d={utm_source:'fleet',utm_medium:'qr_hardcard',utm_campaign:'fleet_referral_q2'};
+  Object.keys(d).forEach(k=>{const el=document.getElementById(k);if(el)el.value=p.get(k)||d[k];});
+})();
+
+// ═══════════════════════════════════════════
+//  WEBHOOK POST
+// ═══════════════════════════════════════════
+const WEBHOOK_URL='https://YOUR-CRM-ENDPOINT.com/api/webhook/fleet-referral';
+async function post(payload){
+  try{await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});}
+  catch(e){console.warn('[Webhook]',e);}
+}
+function val(id){return document.getElementById(id)?.value?.trim()||'';}
+
+async function submitDirect(e){
+  e.preventDefault();
+  const btn=document.getElementById('btn-direct');btn.classList.add('loading');btn.innerHTML='';
+  trackEvent('InitiateCheckout',{content_name:'form_started',content_category:'direct'});
+  await post({event:'fleet_lead_direct',timestamp:new Date().toISOString(),source:'truck_hardcard',
+    lead:{first_name:val('direct-fname'),last_name:val('direct-lname'),email:val('direct-email'),phone:val('direct-phone'),company:val('direct-company'),title:val('direct-title')},
+    metadata:{card_batch_id:'FLEET_Q2_2026',utm_source:val('utm_source'),utm_medium:val('utm_medium'),utm_campaign:val('utm_campaign')}});
+  trackEvent('Lead',{content_name:'direct_lead',content_category:'fleet_referral'});
+  navigateTo('screen-success-direct');return false;
+}
+
+async function submitReferral(e){
+  e.preventDefault();
+  const btn=document.getElementById('btn-referral');btn.classList.add('loading');btn.innerHTML='';
+  trackEvent('InitiateCheckout',{content_name:'form_started',content_category:'referral'});
+  await post({event:'fleet_lead_referral',timestamp:new Date().toISOString(),source:'truck_hardcard',
+    referrer:{name:val('ref-name'),email:val('ref-email'),phone:val('ref-phone')},
+    referred_lead:{name:val('ref-lead-name'),email:val('ref-lead-email'),phone:val('ref-lead-phone'),company:val('ref-lead-company')},
+    metadata:{card_batch_id:'FLEET_Q2_2026',utm_source:'fleet',utm_medium:'qr_hardcard',utm_campaign:'fleet_referral_q2'}});
+  trackEvent('Lead',{content_name:'referral_lead',content_category:'fleet_referral'});
+  navigateTo('screen-success-referral');return false;
+}
+
+// ═══════════════════════════════════════════
+//  TRACKING
+// ═══════════════════════════════════════════
+function trackEvent(ev,params){
+  if(typeof fbq==='function')fbq('track',ev,params);
+  if(typeof gtag==='function')gtag('event','fleet_'+ev.toLowerCase(),params);
+  console.log('[Track]',ev,params);
+}
+
+// ═══════════════════════════════════════════
+//  SCREEN TRANSITIONS
+// ═══════════════════════════════════════════
+document.querySelectorAll('.screen').forEach(s=>{
+  s.style.transition='opacity .35s ease, transform .35s ease';
+});
+
+// Staggered reveal for fork cards
+setTimeout(()=>{
+  document.querySelectorAll('.fork-card').forEach((card,i)=>{
+    setTimeout(()=>card.classList.add('visible'), i*150);
+  });
+}, 1000);
+</script>
+</body>
+</html>

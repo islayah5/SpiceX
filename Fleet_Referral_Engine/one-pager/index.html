@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpiceX | One-Pager</title>
+<meta name="description" content="SpiceX is the AI-native automation layer that sits on top of your existing enterprise systems and makes them work together. No rip-and-replace.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════════ */
+/*  RESET & TOKENS                            */
+/* ═══════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#D6001C;--red-g:rgba(214,0,28,.6);--orange:#ff6b35;
+  --black:#030303;--card:#080808;
+  --steel:#c2c8cf;--steel-d:#9198a1;
+  --glass:rgba(10,10,10,.5);--gb:rgba(255,255,255,.07);
+  --sans:'Montserrat',sans-serif;--head:'Oswald',sans-serif;--mono:'Space Grotesk',monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--black);color:#fff;font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--red);color:#fff}
+
+/* ═══ CANVAS (screen only) ═══ */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.vignette{position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.85));pointer-events:none;z-index:1}
+.scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.008) 2px,rgba(255,255,255,.008) 4px);pointer-events:none;z-index:1;opacity:.35}
+.glow-wrap{position:fixed;inset:0;z-index:0;filter:blur(100px);pointer-events:none;opacity:.1}
+.glow-wrap .o1{position:absolute;width:50vw;height:50vw;background:var(--red);border-radius:50%;top:-15vw;left:-10vw;animation:gf 30s ease-in-out infinite alternate}
+.glow-wrap .o2{position:absolute;width:40vw;height:40vw;background:rgba(0,100,255,.3);border-radius:50%;bottom:-10vw;right:-5vw;animation:gf 22s ease-in-out infinite alternate-reverse}
+@keyframes gf{0%{transform:scale(1) translate(0,0)}50%{transform:scale(1.2) translate(6vw,3vw)}100%{transform:scale(.85) translate(-3vw,-4vw)}}
+
+/* ═══ MAIN CONTAINER ═══ */
+.page{position:relative;z-index:10;max-width:920px;margin:0 auto;padding:0 28px}
+
+/* ═══ HEADER ═══ */
+header{display:flex;align-items:center;justify-content:space-between;padding:32px 0 24px}
+header img{height:30px;filter:drop-shadow(0 0 20px rgba(214,0,28,.4))}
+.tag{font-family:var(--mono);font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--steel-d);border:1px solid rgba(255,255,255,.08);padding:5px 12px;border-radius:100px}
+
+/* ═══ HERO ═══ */
+.hero{text-align:center;padding:44px 0 36px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;border:1px solid rgba(214,0,28,.25);background:rgba(214,0,28,.04);margin-bottom:18px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
+.hero-badge span{font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red)}
+.hero h1{font-family:var(--head);font-size:clamp(2.2rem,6vw,3.4rem);font-weight:700;text-transform:uppercase;line-height:.92;margin-bottom:8px;letter-spacing:-.02em}
+.hero h1 .dim{color:rgba(255,255,255,.3)}
+.hero h1 .red{background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none}
+.hero-sub{font-family:var(--sans);font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--steel);max-width:580px;margin:14px auto 0;line-height:1.75;font-weight:400}
+.hero-sub strong{color:#fff;font-weight:600}
+
+/* ═══ STAT BAR ═══ */
+.stat-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:36px 0;border-radius:16px;overflow:hidden}
+.stat{background:var(--glass);backdrop-filter:blur(16px);padding:22px 16px;text-align:center;transition:background .3s}
+.stat:hover{background:rgba(214,0,28,.06)}
+.stat-val{font-family:var(--head);font-size:clamp(1.8rem,4vw,2.4rem);font-weight:700;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.stat-label{font-family:var(--mono);font-size:.7rem;color:var(--steel-d);text-transform:uppercase;letter-spacing:.12em;margin-top:6px}
+
+/* ═══ SECTIONS ═══ */
+.section{margin:32px 0}
+.section-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label .pill{padding:4px 12px;border-radius:100px;font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.pill-problem{background:rgba(255,60,60,.1);color:#ff6b6b;border:1px solid rgba(255,60,60,.2)}
+.pill-solution{background:rgba(214,0,28,.1);color:var(--red);border:1px solid rgba(214,0,28,.2)}
+.pill-how{background:rgba(255,107,53,.1);color:var(--orange);border:1px solid rgba(255,107,53,.2)}
+.section-label .line{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.08),transparent)}
+
+/* Problem cards */
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.p-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--gb);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:all .3s var(--ease)}
+.p-card:hover{border-color:rgba(255,60,60,.2);transform:translateY(-2px)}
+.p-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,60,60,.08);color:#ff6b6b;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.p-card h4{font-family:var(--head);font-size:.92rem;font-weight:700;text-transform:uppercase;margin-bottom:4px;letter-spacing:.02em}
+.p-card p{font-family:var(--sans);font-size:.82rem;color:var(--steel-d);line-height:1.6}
+
+/* Solution card */
+.sol-card{background:rgba(214,0,28,.04);backdrop-filter:blur(16px);border:1px solid rgba(214,0,28,.15);border-radius:16px;padding:28px;text-align:center;position:relative;overflow:hidden}
+.sol-card::before{content:'';position:absolute;inset:-1px;border-radius:17px;background:linear-gradient(135deg,rgba(214,0,28,.3),transparent,rgba(255,107,53,.2));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px}
+.sol-card h3{font-family:var(--head);font-size:clamp(1.25rem,3vw,1.7rem);font-weight:700;text-transform:uppercase;margin-bottom:10px}
+.sol-card h3 .red{color:var(--red)}
+.sol-card p{font-family:var(--sans);font-size:.92rem;color:var(--steel);line-height:1.7;max-width:600px;margin:0 auto}
+
+/* ═══ LAYER CAKE VISUAL ═══ */
+.layers{display:flex;flex-direction:column;gap:8px;margin:28px auto;max-width:540px;perspective:800px}
+.layer{border-radius:12px;padding:16px 22px;display:flex;align-items:center;gap:16px;transition:all .4s var(--ease);cursor:default}
+.layer:hover{transform:translateY(-3px) rotateX(2deg)}
+.layer-legacy{background:rgba(40,40,50,.5);border:1px solid rgba(176,184,193,.12)}
+.layer-spicex{background:rgba(214,0,28,.08);border:2px solid rgba(214,0,28,.4);box-shadow:0 0 30px rgba(214,0,28,.1);position:relative;overflow:hidden}
+.layer-spicex::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(transparent,rgba(214,0,28,.08),transparent 30%);animation:sweep 4s linear infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.layer-output{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)}
+.l-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.layer-legacy .l-icon{background:rgba(176,184,193,.1);color:var(--steel)}
+.layer-spicex .l-icon{background:rgba(214,0,28,.15);color:var(--red)}
+.layer-output .l-icon{background:rgba(255,255,255,.06);color:#fff}
+.l-text h5{font-family:var(--head);font-size:.88rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.l-text p{font-family:var(--sans);font-size:.78rem;color:var(--steel-d);margin-top:2px}
+.layer-spicex .l-text h5{color:var(--red)}
+.layer-arrows{text-align:center;font-size:.7rem;color:rgba(214,0,28,.4);letter-spacing:5px}
+
+/* ═══ HOW IT WORKS ═══ */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.how-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--gb);border-radius:14px;padding:22px 16px;text-align:center;transition:all .35s var(--ease)}
+.how-card:hover{border-color:rgba(214,0,28,.2);transform:translateY(-3px)}
+.how-num{font-family:var(--head);font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:8px}
+.how-card h4{font-family:var(--head);font-size:.95rem;font-weight:700;text-transform:uppercase;margin-bottom:6px}
+.how-card p{font-family:var(--sans);font-size:.82rem;color:var(--steel-d);line-height:1.6}
+
+/* ═══ USE CASES ═══ */
+.use-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.use-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--gb);border-radius:14px;padding:18px;display:flex;align-items:flex-start;gap:14px;transition:all .3s var(--ease)}
+.use-card:hover{border-color:rgba(255,107,53,.2);transform:translateX(4px)}
+.use-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,107,53,.08);color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.use-card h4{font-family:var(--head);font-size:.88rem;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.use-card p{font-family:var(--sans);font-size:.82rem;color:var(--steel-d);line-height:1.6}
+
+/* ═══ COMPLIANCE BAR ═══ */
+.compliance{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;padding:22px 0;margin:28px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.badge-item{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.7rem;color:var(--steel-d);letter-spacing:.06em;text-transform:uppercase}
+.badge-item i{color:rgba(214,0,28,.45);font-size:.7rem}
+
+/* ═══ CTA SECTION ═══ */
+.cta-section{text-align:center;padding:24px 0 44px}
+.cta-section h2{font-family:var(--head);font-size:clamp(1.4rem,3.5vw,1.9rem);font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.cta-section p{font-family:var(--sans);font-size:.92rem;color:var(--steel-d);margin-bottom:20px}
+.cta-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:12px;font-family:var(--head);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;transition:all .3s var(--ease);border:none;text-decoration:none}
+.cta-primary{background:linear-gradient(135deg,var(--red),#8a0012);color:#fff;box-shadow:0 4px 24px rgba(214,0,28,.35)}
+.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(214,0,28,.5)}
+.cta-secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.15)}
+.cta-secondary:hover{border-color:rgba(214,0,28,.4);background:rgba(214,0,28,.04)}
+
+/* ═══ FOOTER ═══ */
+footer{text-align:center;padding:18px;font-family:var(--mono);font-size:.55rem;color:rgba(255,255,255,.12);letter-spacing:.25em;text-transform:uppercase;border-top:1px solid rgba(255,255,255,.04)}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+
+/* ═══ SCROLL ANIMATIONS ═══ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ═══════════════════════════════════════════ */
+/*  MOBILE — text readability priority        */
+/* ═══════════════════════════════════════════ */
+@media(max-width:600px){
+  .page{padding:0 18px}
+  header{padding:20px 0 16px}
+  header img{height:26px}
+  .tag{font-size:.6rem}
+
+  .hero{padding:28px 0 24px}
+  .hero h1{font-size:2rem;line-height:.95}
+  .hero-sub{font-size:.92rem;line-height:1.7}
+
+  .stat-bar{grid-template-columns:1fr;gap:1px;border-radius:14px}
+  .stat{padding:16px 14px}
+  .stat-val{font-size:1.8rem}
+  .stat-label{font-size:.68rem}
+
+  .problem-grid{grid-template-columns:1fr}
+  .p-card{padding:16px}
+  .p-card h4{font-size:.88rem}
+  .p-card p{font-size:.82rem}
+
+  .sol-card{padding:22px 18px}
+  .sol-card h3{font-size:1.15rem}
+  .sol-card p{font-size:.88rem}
+
+  .layers{max-width:100%}
+  .layer{padding:14px 16px}
+  .l-text h5{font-size:.82rem}
+  .l-text p{font-size:.75rem}
+
+  .how-grid{grid-template-columns:1fr}
+  .how-card{padding:18px 14px}
+  .how-num{font-size:1.6rem}
+  .how-card h4{font-size:.9rem}
+  .how-card p{font-size:.82rem}
+
+  .use-grid{grid-template-columns:1fr}
+  .use-card{padding:16px}
+  .use-card h4{font-size:.85rem}
+  .use-card p{font-size:.82rem}
+
+  .compliance{gap:14px}
+  .badge-item{font-size:.65rem}
+
+  .cta-section h2{font-size:1.3rem}
+  .cta-section p{font-size:.88rem}
+  .cta-btn{font-size:.9rem;padding:12px 24px;width:100%;justify-content:center}
+}
+
+/* ═══════════════════════════════════════════ */
+/*  PRINT / PDF — pixel-perfect output        */
+/* ═══════════════════════════════════════════ */
+@media print{
+  /* Hide all cinematic overlays */
+  #bg,.vignette,.scanlines,.glow-wrap{display:none!important}
+
+  /* Reset body for PDF */
+  body{
+    background:#0a0a0a!important;
+    color:#e8e8e8!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+
+  /* No animations */
+  .reveal{opacity:1!important;transform:none!important;transition:none!important}
+  .layer:hover,.p-card:hover,.how-card:hover,.use-card:hover,.stat:hover{transform:none!important}
+
+  /* Fixed sizing for PDF */
+  .page{max-width:100%;padding:0 32px}
+  html{font-size:15px}
+
+  /* Ensure cards get visible backgrounds */
+  .p-card,.how-card,.use-card,.stat,.layer{
+    background:rgba(20,20,25,.95)!important;
+    backdrop-filter:none!important;
+    border-color:rgba(255,255,255,.12)!important;
+    break-inside:avoid;
+  }
+  .sol-card{
+    background:rgba(214,0,28,.06)!important;
+    backdrop-filter:none!important;
+    break-inside:avoid;
+  }
+  .layer-spicex{
+    background:rgba(214,0,28,.1)!important;
+    border-color:rgba(214,0,28,.5)!important;
+  }
+  .layer-spicex::after{display:none}
+
+  /* Gradient text doesn't print — use solid colors */
+  .stat-val,.how-num{
+    -webkit-text-fill-color:var(--red)!important;
+    color:var(--red)!important;
+  }
+  .hero h1 .red{
+    -webkit-text-fill-color:var(--red)!important;
+    color:var(--red)!important;
+  }
+  .hero h1 .dim{color:rgba(255,255,255,.5)!important}
+
+  /* Force text colors for readability */
+  .p-card p,.how-card p,.use-card p,.sol-card p,.l-text p,.hero-sub,.stat-label,.badge-item,.cta-section p{
+    color:#aeb5bd!important;
+  }
+  .p-card h4,.how-card h4,.use-card h4,.l-text h5{
+    color:#e0e0e0!important;
+  }
+
+  /* CTA buttons as text in PDF */
+  .cta-primary{
+    background:var(--red)!important;
+    box-shadow:none!important;
+  }
+  .cta-secondary{
+    border-color:rgba(255,255,255,.25)!important;
+  }
+
+  /* Page break control */
+  .hero,.stat-bar{break-after:avoid}
+  .section{break-inside:avoid}
+  .cta-section{break-before:avoid}
+
+  /* Minimize margins */
+  @page{
+    margin:0.4in;
+    size:letter;
+  }
+
+  /* Header logo filter */
+  header img{filter:none!important}
+
+  /* Compliance badges */
+  .compliance{border-color:rgba(255,255,255,.1)!important}
+}
+</style>
+</head>
+<body>
+
+<div class="glow-wrap"><div class="o1"></div><div class="o2"></div></div>
+<canvas id="bg"></canvas>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+
+<div class="page">
+  <!-- HEADER -->
+  <header>
+    <img src="https://islayah5.github.io/image-assets/SpiceX_logo/SpiceX%20Logo.png" alt="SpiceX">
+    <div class="tag">One-Pager · 2026</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot"></span><span>Intelligent Orchestration</span></div>
+    <h1>
+      <span class="dim">Your Systems Are</span><br>
+      <span class="dim">Fighting Each Other.</span><br>
+      <span class="red">We Fix That.</span>
+    </h1>
+    <p class="hero-sub">SpiceX is the <strong>AI-native automation layer</strong> that sits <strong>on&nbsp;top</strong> of your existing enterprise tools and makes them work together. No rip-and-replace. No 18-month migration. <strong>Drag. Drop. Deploy.</strong></p>
+  </section>
+
+  <!-- STATS -->
+  <div class="stat-bar reveal">
+    <div class="stat"><div class="stat-val">75%</div><div class="stat-label">Lower Pro Services Cost</div></div>
+    <div class="stat"><div class="stat-val">10×</div><div class="stat-label">Faster Deployment</div></div>
+    <div class="stat"><div class="stat-val">46%</div><div class="stat-label">CIOs Open to AI-Native</div></div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="section reveal">
+    <div class="section-label"><div class="pill pill-problem">The Problem</div><div class="line"></div></div>
+    <div class="problem-grid">
+      <div class="p-card">
+        <div class="p-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
+        <div><h4>Siloed Systems</h4><p>Salesforce can't talk to SAP. ServiceNow ignores Oracle. Data lives in islands.</p></div>
+      </div>
+      <div class="p-card">
+        <div class="p-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div><h4>18-Month Migrations</h4><p>Traditional integrations take years and cost millions — then break on updates.</p></div>
+      </div>
+      <div class="p-card">
+        <div class="p-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+        <div><h4>Runaway Pro Services</h4><p>You're paying consultants to do what software should do automatically.</p></div>
+      </div>
+      <div class="p-card">
+        <div class="p-icon"><i class="fa-solid fa-robot"></i></div>
+        <div><h4>AI Lock-In</h4><p>Most platforms force one AI vendor. When the model landscape shifts, you're stuck.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="section reveal">
+    <div class="section-label"><div class="pill pill-solution">The Solution</div><div class="line"></div></div>
+    <div class="sol-card">
+      <h3>Spice<span class="red">X</span> is a <span class="red">System of Systems</span></h3>
+      <p>One unified orchestration layer that connects your existing tools — Salesforce, SAP, ServiceNow, anything — without replacing them. Low-code/no-code builder. AI-agnostic. Deploy in weeks. Scale without consultants.</p>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE VISUAL -->
+  <div class="layers reveal">
+    <div class="layer layer-output">
+      <div class="l-icon"><i class="fa-solid fa-chart-line"></i></div>
+      <div class="l-text"><h5>Unified Output</h5><p>One dashboard. One workflow. One source of truth.</p></div>
+    </div>
+    <div class="layer-arrows">▼ ▼ ▼</div>
+    <div class="layer layer-spicex">
+      <div class="l-icon"><i class="fa-solid fa-fire"></i></div>
+      <div class="l-text"><h5>SpiceX Orchestration Layer</h5><p>AI-powered routing, automation, and integration engine.</p></div>
+    </div>
+    <div class="layer-arrows">▲ ▲ ▲</div>
+    <div class="layer layer-legacy">
+      <div class="l-icon"><i class="fa-solid fa-database"></i></div>
+      <div class="l-text"><h5>Legacy Systems</h5><p>Salesforce · SAP · ServiceNow · Oracle · Any API</p></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section reveal">
+    <div class="section-label"><div class="pill pill-how">How It Works</div><div class="line"></div></div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <h4>Connect</h4>
+        <p>Plug into your existing tools via pre-built connectors. No custom code needed.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <h4>Orchestrate</h4>
+        <p>Visual drag-and-drop builder to design cross-system workflows in minutes.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <h4>Deploy</h4>
+        <p>Go live in weeks, not years. AI handles routing, exceptions, and optimization.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="section reveal">
+    <div class="section-label"><div class="pill pill-solution">Use Cases</div><div class="line"></div></div>
+    <div class="use-grid">
+      <div class="use-card">
+        <div class="use-icon"><i class="fa-solid fa-headset"></i></div>
+        <div><h4>Customer Service</h4><p>Unify ticketing, CRM, and knowledge base into one agent workflow.</p></div>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><i class="fa-solid fa-gears"></i></div>
+        <div><h4>IT Operations</h4><p>Auto-route incidents across tools. Reduce MTTR by 60%+.</p></div>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <div><h4>Revenue Ops</h4><p>Connect sales, marketing, and finance data for real-time pipeline visibility.</p></div>
+      </div>
+      <div class="use-card">
+        <div class="use-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <div><h4>Compliance</h4><p>Automated audit trails and policy enforcement across all connected systems.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPLIANCE -->
+  <div class="compliance reveal">
+    <div class="badge-item"><i class="fa-solid fa-shield-halved"></i> SOC 2 Type II</div>
+    <div class="badge-item"><i class="fa-solid fa-lock"></i> HIPAA-Ready</div>
+    <div class="badge-item"><i class="fa-solid fa-robot"></i> AI-Agnostic</div>
+    <div class="badge-item"><i class="fa-solid fa-code"></i> Low-Code / No-Code</div>
+    <div class="badge-item"><i class="fa-solid fa-plug"></i> 200+ Connectors</div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <h2>Stop Managing. Start Orchestrating.</h2>
+    <p>See how SpiceX eliminates the chaos between your enterprise systems.</p>
+    <div class="cta-row">
+      <a href="https://spicex.com/go" class="cta-btn cta-primary"><i class="fa-solid fa-calendar"></i> Book a Demo</a>
+      <a href="https://spicex.com" target="_blank" class="cta-btn cta-secondary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Visit spicex.com</a>
+    </div>
+  </section>
+
+  <footer>SpiceX · Intelligent Orchestration · 2026</footer>
+</div>
+
+<script>
+// 3D Particle Engine (minimal for one-pager)
+const c=document.getElementById('bg'),x=c.getContext('2d');let W,H,t=0;
+function rs(){W=c.width=innerWidth;H=c.height=innerHeight}
+class P{constructor(){this.x=(Math.random()-.5)*W;this.y=(Math.random()-.5)*H;this.z=Math.random()*400;this.s=Math.random()*.3+.1;this.o=Math.random()*Math.PI*2}
+update(){const f=.004;this.x+=Math.sin(this.y*f+t+this.o)*this.s*1.5;this.y+=Math.cos(this.z*f+t+this.o)*this.s*1.5;this.z+=Math.sin(this.x*f-t)*this.s;if(this.x>W)this.x=-W;if(this.x<-W)this.x=W;if(this.y>H)this.y=-H;if(this.y<-H)this.y=H;if(this.z>800)this.z=0;if(this.z<0)this.z=800}}
+const ps=Array.from({length:60},()=>new P());
+function draw(){t+=.006;x.clearRect(0,0,W,H);const pr=[];
+ps.forEach(p=>{p.update();const s=400/(400+p.z);if(s>0)pr.push({o:p,px:W/2+p.x*s,py:H/2+p.y*s,s})});
+for(let i=0;i<pr.length;i++){const a=pr[i];for(let j=i+1;j<pr.length;j++){const b=pr[j];const d=Math.sqrt((a.o.x-b.o.x)**2+(a.o.y-b.o.y)**2+(a.o.z-b.o.z)**2);if(d<160){const al=(1-d/160)*Math.min((a.s+b.s)/2,1)*.25;x.beginPath();x.moveTo(a.px,a.py);x.lineTo(b.px,b.py);x.strokeStyle=a.s>.7?`rgba(214,0,28,${al})`:`rgba(176,184,193,${al})`;x.lineWidth=.5;x.stroke()}}}
+pr.forEach(p=>{x.beginPath();x.arc(p.px,p.py,Math.max(p.s*2,.4),0,Math.PI*2);x.fillStyle=p.s>.7?`rgba(214,0,28,${p.s*.6})`:`rgba(176,184,193,${p.s*.3})`;x.fill()});
+requestAnimationFrame(draw)}
+addEventListener('resize',rs);rs();draw();
+
+// Scroll reveal
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
